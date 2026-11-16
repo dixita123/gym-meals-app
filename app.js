@@ -144,7 +144,7 @@
     const fee = deliveryFee();
     const itemsText = lines.map((l) => `• ${l.item.name} x${l.qty} = ${money(l.item.price * l.qty)}`).join("\n")
       + (fee ? `\n• Delivery charge = ${money(fee)}` : `\n• Delivery = Free`);
-    const msg = `*New order ${orderId}*\n${itemsText}\n\n*Total: ${money(total)}*\nPayment: ${f.payment}\nSlot: ${f.slot}\n\nName: ${f.name}\nPhone: ${f.phone}\nAddress (${C.deliveryArea}, ${C.city}): ${f.address}${f.mapLink ? `\nMap: ${f.mapLink}` : ""}${f.notes ? `\nNotes: ${f.notes}` : ""}`;
+    const msg = `*New order ${orderId}*\n${itemsText}\n\n*Total: ${money(total)}*\nPayment: ${f.payment}\nSlot: ${f.slot}\n\nName: ${f.name}\nPhone: ${f.phone}\nAddress: ${f.address}${f.mapLink ? `\nMap: ${f.mapLink}` : ""}${f.notes ? `\nNotes: ${f.notes}` : ""}`;
 
     // Optional: log to Google Sheet (fire-and-forget)
     if (C.orderWebhookUrl) {
@@ -162,9 +162,9 @@
   // ---------- Init ----------
   document.title = C.businessName;
   $("shopName").textContent = C.businessName;
-  $("tagline").textContent = `${C.tagline} Delivering within ${C.deliveryArea}, ${C.city}.`;
-  $("areaNote").textContent = `We deliver only inside ${C.deliveryArea}, ${C.city}.`;
-  $("addressInput").placeholder = `Company / building / floor / desk (inside ${C.deliveryArea})`;
+  $("tagline").textContent = `${C.tagline} Delivering only in ${C.deliveryArea}, ${C.city}.`;
+  $("areaNote").textContent = `We deliver only in ${C.deliveryArea}, ${C.city}.`;
+  $("addressInput").placeholder = `Company / building / floor / desk`;
   $("locBtn").onclick = () => {
     if (!navigator.geolocation) return toast("Location not supported — paste a Maps link instead");
     navigator.geolocation.getCurrentPosition(

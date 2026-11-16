@@ -7,7 +7,7 @@ window.CONFIG = {
 
   // Delivery area (shown on the site and at checkout)
   city: "Udaipur",
-  deliveryArea: "IT Park",
+  deliveryArea: "IT Park & Madri Industrial Area, within 2 km of Arcgate",
 
   // Parents' WhatsApp number with country code, digits only (e.g. India: 919876543210)
   whatsappNumber: "919680079769",
