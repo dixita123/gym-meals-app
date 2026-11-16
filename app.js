@@ -123,6 +123,12 @@
     e.preventDefault();
     const lines = cartLines();
     if (!lines.length) return;
+    // If the page was left open past the cut-off, the breakfast date may have moved: refresh and ask to re-pick.
+    const sel = $("slotSelect").selectedOptions[0];
+    if (sel && sel.dataset.base && slotLabel(sel.dataset.base) !== sel.value) {
+      renderSlots();
+      return toast("Breakfast cut-off passed — delivery date updated. Please choose your slot again.");
+    }
     const f = Object.fromEntries(new FormData(e.target));
     f.payment = "UPI (customer says paid — verify screenshot)";
     delete f.paid;
@@ -157,7 +163,27 @@
       () => toast("Couldn't get location — paste a Maps link instead")
     );
   };
-  $("slotSelect").innerHTML = `<option value="">Choose delivery slot</option>` + C.deliverySlots.map((s) => `<option>${esc(s)}</option>`).join("");
+  // ---------- Breakfast next-day cut-off ----------
+  const isBreakfastSlot = (s) => /breakfast/i.test(s);
+  // Delivery date for breakfast: tomorrow if ordering before the cut-off hour (shop time zone), else the day after.
+  function breakfastDateLabel() {
+    const p = Object.fromEntries(new Intl.DateTimeFormat("en-GB", {
+      timeZone: C.timeZone || "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23",
+    }).formatToParts(new Date()).map((x) => [x.type, x.value]));
+    const daysAhead = Number(p.hour) < (C.breakfastCutoffHour ?? 22) ? 1 : 2;
+    const d = new Date(Date.UTC(+p.year, +p.month - 1, +p.day + daysAhead));
+    return d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
+  }
+  const slotLabel = (s) => (isBreakfastSlot(s) ? `${s} · ${breakfastDateLabel()}` : s);
+  function renderSlots() {
+    $("slotSelect").innerHTML = `<option value="">Choose delivery slot</option>` +
+      C.deliverySlots.map((s) => `<option value="${esc(slotLabel(s))}" data-base="${esc(s)}">${esc(slotLabel(s))}</option>`).join("");
+    const cut = C.breakfastCutoffHour ?? 22;
+    const h12 = cut % 12 || 12, ap = cut >= 12 ? "PM" : "AM";
+    $("cutoffNote").textContent = `🕙 Breakfast is delivered next day — order by ${h12} ${ap} the evening before. Ordering now? Your breakfast arrives ${breakfastDateLabel()}.`;
+    $("cutoffNote").hidden = false;
+  }
+  renderSlots();
   loadMenu().then(() => { renderTabs(); refresh(); });
   renderTabs(); refresh();
 })();
