@@ -24,6 +24,10 @@ window.CONFIG = {
     "Lunch 12:00 – 1:00 PM",
   ],
 
+  // Delivery charge: free when the food total is at least freeDeliveryMin, otherwise deliveryCharge is added.
+  freeDeliveryMin: 99,
+  deliveryCharge: 39,
+
   // Breakfast is next-day delivery: order before this hour (24h clock, shop time zone) the evening before.
   // e.g. 22 = 10 PM. After the cut-off, breakfast orders move to the day after tomorrow.
   breakfastCutoffHour: 22,

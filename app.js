@@ -72,7 +72,9 @@
   }
 
   const cartLines = () => Object.entries(cart).map(([id, qty]) => ({ item: menu.find((m) => m.id === id), qty })).filter((l) => l.item && l.item.available);
-  const cartTotal = () => cartLines().reduce((s, l) => s + l.item.price * l.qty, 0);
+  const cartSubtotal = () => cartLines().reduce((s, l) => s + l.item.price * l.qty, 0);
+  const deliveryFee = () => (cartSubtotal() >= C.freeDeliveryMin ? 0 : C.deliveryCharge);
+  const cartTotal = () => cartSubtotal() + deliveryFee();
 
   function renderCart() {
     const lines = cartLines();
@@ -84,6 +86,11 @@
       <span class="qty"><button data-dec="${esc(l.item.id)}">−</button><b>${l.qty}</b><button data-inc="${esc(l.item.id)}">+</button></span>
       <span>${money(l.item.price * l.qty)}</span></li>`).join("");
     $("cartTotal").textContent = money(cartTotal());
+    const sub = cartSubtotal(), fee = deliveryFee();
+    $("subtotalLine").textContent = `Items: ${money(sub)}`;
+    $("deliveryLine").textContent = fee
+      ? `Delivery: ${money(fee)} — add ${money(C.freeDeliveryMin - sub)} more for free delivery`
+      : `Delivery: Free (orders ${money(C.freeDeliveryMin)}+)`;
     renderPayBox();
     if (!count) $("overlay").hidden = true;
   }
@@ -134,7 +141,9 @@
     delete f.paid;
     const total = cartTotal();
     const orderId = "FB" + Date.now().toString().slice(-6);
-    const itemsText = lines.map((l) => `• ${l.item.name} x${l.qty} = ${money(l.item.price * l.qty)}`).join("\n");
+    const fee = deliveryFee();
+    const itemsText = lines.map((l) => `• ${l.item.name} x${l.qty} = ${money(l.item.price * l.qty)}`).join("\n")
+      + (fee ? `\n• Delivery charge = ${money(fee)}` : `\n• Delivery = Free`);
     const msg = `*New order ${orderId}*\n${itemsText}\n\n*Total: ${money(total)}*\nPayment: ${f.payment}\nSlot: ${f.slot}\n\nName: ${f.name}\nPhone: ${f.phone}\nAddress (${C.deliveryArea}, ${C.city}): ${f.address}${f.mapLink ? `\nMap: ${f.mapLink}` : ""}${f.notes ? `\nNotes: ${f.notes}` : ""}`;
 
     // Optional: log to Google Sheet (fire-and-forget)
