@@ -29,7 +29,7 @@ window.CONFIG = {
   sheetCsvUrl: "",
 
   // OPTIONAL (see README): Google Apps Script URL that logs every order into a Google Sheet.
-  orderWebhookUrl: "https://script.google.com/macros/s/AKfycbxwqz522b3vN0vdKSagEaIM3sm1CEO9BoWiLM_m6FcQu71ibAjAWVIFWwVSeJqAwkc-/exec",
+  orderWebhookUrl: "https://script.google.com/macros/s/AKfycbzUv0kR2U2MoSXaI2Mz2Rs2MR9drj5TupGsJsjBTplM_9ImQPtqFlehvzBY79Z4TLE/exec",
 
   // Default menu (all vegetarian). PRICES ARE PLACEHOLDERS - set your own.
   // category: "Breakfast" or "Lunch". available: false shows "Sold out".
