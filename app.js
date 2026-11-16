@@ -117,8 +117,18 @@
     const total = cartTotal();
     $("payAmount").textContent = money(total);
     $("upiIdText").textContent = C.upiId;
-    $("upiQr").src = C.upiQrImage;
-    $("upiLink").href = `upi://pay?pa=${encodeURIComponent(C.upiId)}&pn=${encodeURIComponent(C.upiName)}&am=${total}&cu=INR`;
+    const upiUrl = `upi://pay?pa=${encodeURIComponent(C.upiId)}&pn=${encodeURIComponent(C.upiName)}&am=${total}&cu=INR`;
+    $("upiLink").href = upiUrl;
+    // QR is generated for this exact order amount. Falls back to the static QR image if generation fails.
+    try {
+      const qr = window.qrcode(0, "M");
+      qr.addData(upiUrl);
+      qr.make();
+      $("upiQr").src = qr.createDataURL(6, 4);
+    } catch (e) {
+      console.warn("Could not generate QR, using static image.", e);
+      $("upiQr").src = C.upiQrImage;
+    }
   }
 
   function toast(msg) {

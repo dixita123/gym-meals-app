@@ -44,7 +44,7 @@
 
         <div class="pay-box">
           <h3>Pay by UPI</h3>
-          <p class="note">Online payment only (no cash on delivery). Scan the QR or tap the button, pay <b id="payAmount"></b>, then send the payment screenshot on WhatsApp.</p>
+          <p class="note">Online payment only (no cash on delivery). Scan the QR (it already has your amount) or tap the button, pay <b id="payAmount"></b>, then send the payment screenshot on WhatsApp.</p>
           <img id="upiQr" class="qr" alt="UPI QR code" />
           <p class="upi-id">UPI ID: <b id="upiIdText"></b> <button type="button" id="copyUpi" class="link">Copy</button></p>
           <a id="upiLink" class="pay-btn" href="#">Pay with UPI app</a>
@@ -59,6 +59,7 @@
   <div id="toast" class="toast" hidden></div>
 
   <script src="config.js"></script>
+  <script src="qrcode.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
