@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gym-Fit Breakfast & Lunch</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <h1 id="shopName"></h1>
+    <p id="tagline"></p>
+  </header>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <main>
+    <section id="menu" class="grid"></section>
+  </main>
+
+  <button id="cartBar" class="cart-bar" hidden></button>
+
+  <!-- Checkout panel -->
+  <div id="overlay" class="overlay" hidden>
+    <div class="panel">
+      <button class="close" id="closeBtn" aria-label="Close">×</button>
+      <h2>Your order</h2>
+      <ul id="cartList" class="cart-list"></ul>
+      <p class="total">Total: <strong id="cartTotal"></strong></p>
+
+      <form id="orderForm">
+        <input name="name" placeholder="Your name" required />
+        <input name="phone" type="tel" placeholder="Phone number" required pattern="[0-9+ ]{7,15}" />
+        <p class="note area-note" id="areaNote"></p>
+        <textarea name="address" id="addressInput" rows="2" required></textarea>
+        <input name="mapLink" id="mapLink" type="url" placeholder="Google Maps link (optional)" />
+        <button type="button" id="locBtn" class="link">📍 Use my current location</button>
+        <select name="slot" id="slotSelect" required></select>
+        <textarea name="notes" placeholder="Notes (allergies, less spice…) — optional" rows="2"></textarea>
+
+        <div class="pay-box">
+          <h3>Pay by UPI</h3>
+          <p class="note">Online payment only (no cash on delivery). Scan the QR or tap the button, pay <b id="payAmount"></b>, then send the payment screenshot on WhatsApp.</p>
+          <img id="upiQr" class="qr" alt="UPI QR code" />
+          <p class="upi-id">UPI ID: <b id="upiIdText"></b> <button type="button" id="copyUpi" class="link">Copy</button></p>
+          <a id="upiLink" class="pay-btn" href="#">Pay with UPI app</a>
+        </div>
+        <label class="check"><input type="checkbox" name="paid" required /> I have paid via UPI</label>
+
+        <button type="submit" class="primary">Place order on WhatsApp</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
